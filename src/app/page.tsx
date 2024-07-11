@@ -1,5 +1,6 @@
 import { url } from "inspector";
 import Link from "next/link";
+import { db } from "~/server/db";
 
 const imageUrls = [
   "https://uploadthing-prod-sea1.s3.us-west-2.amazonaws.com/e2882937-dbb9-4d6d-8e64-c6261ce20a6f-j9jw6t.08.56.jpg",
@@ -12,15 +13,18 @@ const images = imageUrls.map((url, index) => ({
   url,
 }));
 
-export default function HomePage() {
+export default async function HomePage() {
+  const posts = await db.query.posts.findMany();
+
   return (
-    <div className="flex flex-wrap gap-4">{
-      [...images,...images].map((image) => (
+    <div className="flex flex-wrap gap-4">
+      {posts.map((post) => <div key={post.id}>{post.name}</div>)}
+
+      {[...images, ...images].map((image) => (
         <div key={image.id} className="w-48">
-          <img src={image.url} alt={"Images"}/>
+          <img src={image.url} alt={"Images"} />
         </div>
-      ))
-    }
+      ))}
     </div>
   );
 }
