@@ -1,8 +1,9 @@
 import {db} from "~/server/db";
 import {SignedIn, SignedOut} from "@clerk/nextjs";
+import {getImages} from "~/server/queries";
 
 export default async function HomePage() {
-  const images = await db.query.images.findMany();
+  const images = await getImages();
   
   return (
   <>
